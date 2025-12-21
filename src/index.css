@@ -1,147 +1,160 @@
-/* Basic layout */
+/* Layout */
 html, body, #root {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
-
 body {
-    background: #0a0a0a;
-    color: #eaeaea;
-    font-family: system-ui, sans-serif;
+  background: #0a0a0a;
+  color: #eaeaea;
+  font-family: system-ui, sans-serif;
 }
 
 .baldnet {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
 }
 
+/* Tab bar */
 .tab-bar {
-    height: 42px;
-    background: #111;
-    border-bottom: 1px solid #222;
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* tabs left, toolbox right */
-    padding: 0 10px;
+  height: 42px;
+  background: #111;
+  border-bottom: 1px solid #222;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
 }
 
-.tabs {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+.tabs-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  flex: 1;
+  scrollbar-width: thin;
+}
+.tabs-container::-webkit-scrollbar {
+  height: 6px;
+}
+.tabs-container::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
 }
 
+/* Tabs */
 .tab {
-    background: #1a1a1a;
-    padding: 6px 12px;
-    border-radius: 6px 6px 0 0;
-    margin-right: 6px;
-    font-size: 14px;
-    border: 1px solid #2a2a2a;
-    border-bottom: none;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-
-    /* Prevent growing taller */
-    height: 32px;
-    min-width: 60px;
-    max-width: 180px; /* max width of a tab */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  background: #1a1a1a;
+  padding: 6px 12px;
+  border-radius: 6px 6px 0 0;
+  margin-right: 6px;
+  font-size: 14px;
+  border: 1px solid #2a2a2a;
+  border-bottom: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  min-width: 60px;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
 .tab.active {
-    background: #222;
-    color: #fff;
+  background: #222;
+  color: #fff;
 }
-
 .tab.add {
-    font-weight: bold;
-    background: transparent;
-    border: 1px dashed #333;
+  font-weight: bold;
+  background: transparent;
+  border: 1px dashed #333;
 }
 
 /* Close button */
 .tab .close {
-    font-size: 12px;
-    opacity: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;
-    height: 16px;
-    border-radius: 3px;
-    transition: opacity 0.2s, background 0.2s;
+  font-size: 12px;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  transition: opacity 0.2s, background 0.2s;
 }
-
 .tab:hover .close {
-    opacity: 0.6;
+  opacity: 0.6;
+}
+.tab .close:hover {
+  opacity: 1;
+  background: #333;
+  cursor: pointer;
 }
 
-.tab .close:hover {
-    opacity: 1;
-    background: #333;
-    cursor: pointer;
+/* Tab input editing */
+.tab-edit-input {
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background: #222;
+  color: #fff;
+  box-sizing: border-box;
 }
 
 /* Toolbox */
 .tab-tools {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
-
 .refresh-btn {
-    background: #1a1a1a;
-    border: 1px solid #2a2a2a;
-    border-radius: 4px;
-    padding: 4px 8px;
-    color: #eaeaea;
-    cursor: pointer;
-    transition: background 0.2s;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: #eaeaea;
+  cursor: pointer;
+  transition: background 0.2s;
 }
-
 .refresh-btn:hover {
-    background: #333;
+  background: #333;
 }
 
 /* Tab panel */
 .tab-panel {
-    flex: 1;
-    background: #080808;
+  flex: 1;
+  background: #080808;
 }
-
 .iframe-app, .new-tab {
-    width: 100%;
-    height: 100%;
-    border: none;
+  width: 100%;
+  height: 100%;
+  border: none;
 }
-
 .iframe-app.hidden, .new-tab.hidden {
-    display: none;
+  display: none;
 }
-
 .new-tab {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
 .address-bar {
-    width: 60%;
-    padding: 12px;
-    font-size: 16px;
-    background: #111;
-    border: 1px solid #333;
-    color: white;
-    border-radius: 8px;
+  width: 60%;
+  padding: 12px;
+  font-size: 16px;
+  background: #111;
+  border: 1px solid #333;
+  color: white;
+  border-radius: 8px;
 }
 
+/* Terminal */
 .terminal-tab {
   width: 100%;
   height: 100%;
@@ -152,13 +165,11 @@ body {
   font-family: monospace;
   padding: 8px;
 }
-
 .terminal-output {
   flex: 1;
   overflow-y: auto;
   padding-bottom: 4px;
 }
-
 .terminal-input {
   padding: 8px;
   font-family: monospace;
@@ -168,34 +179,3 @@ body {
   color: #0f0;
   border-radius: 4px;
 }
-
-.tabs-container {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    overflow-x: auto; /* scroll horizontally if tabs overflow */
-    flex: 1; /* take available space */
-    scrollbar-width: thin; /* for Firefox */
-}
-
-/* Optional: hide scrollbar visually but allow scrolling */
-.tabs-container::-webkit-scrollbar {
-    height: 6px;
-}
-.tabs-container::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 3px;
-}
-
-.tab-edit-input {
-    width: 100%;
-    height: 100%;
-    font-size: 14px;
-    padding: 2px 4px;
-    border-radius: 4px;
-    border: 1px solid #555;
-    background: #222;
-    color: #fff;
-    box-sizing: border-box;
-}
-
