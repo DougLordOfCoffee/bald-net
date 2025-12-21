@@ -16,7 +16,12 @@ function App() {
           { id: "astrominer", 
            title: "Astro-Miner", 
            type: "iframe", 
-           url: "https://randydomke.github.io/Astrominer" }
+           url: "https://randydomke.github.io/Astrominer" },
+        
+          { id: "terminal", 
+           title: "Terminal", 
+           type: "terminal", 
+           output: [] }
         ];
       
   });
@@ -106,7 +111,28 @@ function App() {
               </div>
             );
           }
-
+            if (tab.type === "terminal") {
+              return (
+                <div key={tab.id} className={`terminal-tab ${activeTab === tab.id ? "active" : "hidden"}`}>
+                  <div className="terminal-output">
+                    {tab.output.map((line, i) => (
+                      <div key={i} style={{ color: line.color || "#fff" }}>{line.text}</div>
+                    ))}
+                  </div>
+                  <input
+                    className="terminal-input"
+                    placeholder="Enter command..."
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        const cmd = e.target.value.trim();
+                        e.target.value = "";
+                        handleCommand(tab.id, cmd);
+                      }
+                    }}
+                  />
+                </div>
+              );
+            }
           return null;
         })}
       </div>
