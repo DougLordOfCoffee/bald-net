@@ -1,0 +1,102 @@
+html, body, #root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #0a0a0a;
+    color: #eaeaea;
+    font-family: system-ui, sans-serif;
+}
+
+.baldnet {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.tab-bar {
+    height: 42px;
+    background: #111;
+    border-bottom: 1px solid #222;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.tab-panel {
+    flex: 1;
+    background: #080808;
+}
+
+.tab {
+    background: #1a1a1a;
+    padding: 6px 12px;
+    border-radius: 6px 6px 0 0;
+    margin-right: 6px;
+    font-size: 14px;
+    border: 1px solid #2a2a2a;
+    border-bottom: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+    .tab.active {
+        background: #222;
+        color: #fff;
+    }
+
+    .tab.add {
+        font-weight: bold;
+        background: transparent;
+        border: 1px dashed #333;
+    }
+
+.close {
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+    .close:hover {
+        opacity: 1;
+    }
+
+.iframe-app {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: black;
+}
+
+.new-tab {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.address-bar {
+    width: 60%;
+    padding: 12px;
+    font-size: 16px;
+    background: #111;
+    border: 1px solid #333;
+    color: white;
+    border-radius: 8px;
+}
+
+.hidden {
+    display: none;
+}
+
+.iframe-app,
+.new-tab {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
