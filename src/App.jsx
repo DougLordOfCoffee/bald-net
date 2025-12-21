@@ -1,84 +1,64 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 function App() {
   const STORAGE_KEY = "baldnet-tabs";
+  const outputRef = useRef(null);
 
   const [tabs, setTabs] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     return saved
       ? JSON.parse(saved)
       : [
-          { id: "dome", 
-           title: "The Dome", 
-           type: "iframe", 
-           url: "https://the-bald-chat.web.app" },
-          
-          { id: "astrominer", 
-           title: "Astro-Miner", 
-           type: "iframe", 
-           url: "https://randydomke.github.io/Astrominer" },
-        
-          { id: "terminal", 
-           title: "Terminal", 
-           type: "terminal", 
-           output: [] }
+          { id: "dome", title: "The Dome", type: "iframe", url: "https://the-bald-chat.web.app" },
+          { id: "astrominer", title: "Astro-Miner", type: "iframe", url: "https://randydomke.github.io/Astrominer" },
+          { id: "terminal", title: "Terminal", type: "terminal", output: [] },
         ];
-      
   });
 
   const [activeTab, setActiveTab] = useState(() => localStorage.getItem("baldnet-active") || "dome");
+  const [editingTabId, setEditingTabId] = useState(null);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(tabs));
     localStorage.setItem("baldnet-active", activeTab);
   }, [tabs, activeTab]);
 
-  useEffect(() => {
-  const handleKey = (e) => {
-    if (e.ctrlKey && e.key.toLowerCase() === "k") {
-      e.preventDefault();
-      // Check if terminal exists
-      const termTab = tabs.find(t => t.type === "terminal");
-      if (termTab) setActiveTab(termTab.id);
-      else {
-        const id = `terminal-${Date.now()}`;
-        setTabs([...tabs, { id, title: "Terminal", type: "terminal", output: [] }]);
-        setActiveTab(id);
-      }
-    }
-  };
-
-  <div className="terminal-output" ref={outputRef}>
-    ...
-  </div>
-  
+  // Scroll terminal to bottom on update
   useEffect(() => {
     if (outputRef.current) outputRef.current.scrollTop = outputRef.current.scrollHeight;
   }, [tabs]);
 
+  // Ctrl+K to open terminal
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.ctrlKey && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        const termTab = tabs.find((t) => t.type === "terminal");
+        if (termTab) setActiveTab(termTab.id);
+        else {
+          const id = `terminal-${Date.now()}`;
+          setTabs([...tabs, { id, title: "Terminal", type: "terminal", output: [] }]);
+          setActiveTab(id);
+        }
+      }
+    };
 
-  window.addEventListener("keydown", handleKey);
-  return () => window.removeEventListener("keydown", handleKey);
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
   }, [tabs]);
 
-
-  // Refresh only the current tab
   const refreshActiveTab = () => {
-    setTabs(tabs =>
-      tabs.map(t =>
-        t.id === activeTab
-          ? { ...t, reloadCounter: (t.reloadCounter || 0) + 1 }
-          : t
+    setTabs((tabs) =>
+      tabs.map((t) =>
+        t.id === activeTab ? { ...t, reloadCounter: (t.reloadCounter || 0) + 1 } : t
       )
     );
   };
 
   const closeTab = (tabId) => {
-    const newTabs = tabs.filter(t => t.id !== tabId);
+    const newTabs = tabs.filter((t) => t.id !== tabId);
     setTabs(newTabs);
-    if (activeTab === tabId && newTabs.length > 0) {
-      setActiveTab(newTabs[0].id);
-    }
+    if (activeTab === tabId && newTabs.length > 0) setActiveTab(newTabs[0].id);
   };
 
   const addTab = () => {
@@ -87,31 +67,77 @@ function App() {
     setActiveTab(id);
   };
 
+  const handleCommand = (tabId, cmd) => {
+    setTabs((tabs) =>
+      tabs.map((t) => {
+        if (t.id !== tabId) return t;
+        const newOutput = [...(t.output || []), { text: `> ${cmd}`, color: "#0f0" }];
+        // Simple demo commands
+        if (cmd === "hello") newOutput.push({ text: "Hello, developer!", color: "#ff0" });
+        else if (cmd.startsWith("say ")) newOutput.push({ text: cmd.slice(4), color: "#0ff" });
+        else newOutput.push({ text: `Unknown command: ${cmd}`, color: "#f00" });
+        return { ...t, output: newOutput };
+      })
+    );
+  };
+
   return (
     <div className="baldnet">
       <div className="tab-bar">
-        <div className="tabs">
-          {tabs.map(tab => (
-            <div
-              key={tab.id}
-              className={`tab ${activeTab === tab.id ? "active" : ""}`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              {tab.title}
-              <span className="close" onClick={(e) => { e.stopPropagation(); closeTab(tab.id); }}>X</span>
-            </div>
-          ))}
-          <div className="tab add" onClick={addTab}>+</div>
+        <div className="tabs-container">
+          {tabs.map((tab) => {
+            const isEditing = tab.id === editingTabId;
+            return (
+              <div
+                key={tab.id}
+                className={`tab ${activeTab === tab.id ? "active" : ""}`}
+                onClick={() => setActiveTab(tab.id)}
+                onDoubleClick={() => setEditingTabId(tab.id)}
+              >
+                {isEditing ? (
+                  <input
+                    className="tab-edit-input"
+                    value={tab.title}
+                    onChange={(e) =>
+                      setTabs(tabs.map((t) => (t.id === tab.id ? { ...t, title: e.target.value } : t)))
+                    }
+                    onBlur={() => setEditingTabId(null)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") setEditingTabId(null);
+                    }}
+                    autoFocus
+                  />
+                ) : (
+                  tab.title
+                )}
+
+                <span
+                  className="close"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    closeTab(tab.id);
+                  }}
+                >
+                  X
+                </span>
+              </div>
+            );
+          })}
+          <div className="tab add" onClick={addTab}>
+            +
+          </div>
         </div>
 
-        {/* Toolbox aligned to the right */}
+        {/* Toolbox */}
         <div className="tab-tools">
-          <button className="refresh-btn" onClick={refreshActiveTab}>🔄 Refresh</button>
+          <button className="refresh-btn" onClick={refreshActiveTab}>
+            🔄 Refresh
+          </button>
         </div>
       </div>
 
       <div className="tab-panel">
-        {tabs.map(tab => {
+        {tabs.map((tab) => {
           if (tab.type === "iframe") {
             return (
               <iframe
@@ -133,35 +159,39 @@ function App() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       const url = e.target.value.startsWith("http") ? e.target.value : `https://${e.target.value}`;
-                      setTabs(tabs => tabs.map(t => t.id === tab.id ? { ...t, type: "iframe", url, title: url } : t));
+                      setTabs(tabs.map((t) => (t.id === tab.id ? { ...t, type: "iframe", url, title: url } : t)));
                     }
                   }}
                 />
               </div>
             );
           }
-            if (tab.type === "terminal") {
-              return (
-                <div key={tab.id} className={`terminal-tab ${activeTab === tab.id ? "active" : "hidden"}`}>
-                  <div className="terminal-output">
-                    {tab.output.map((line, i) => (
-                      <div key={i} style={{ color: line.color || "#fff" }}>{line.text}</div>
-                    ))}
-                  </div>
-                  <input
-                    className="terminal-input"
-                    placeholder="Enter command..."
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        const cmd = e.target.value.trim();
-                        e.target.value = "";
-                        handleCommand(tab.id, cmd);
-                      }
-                    }}
-                  />
+
+          if (tab.type === "terminal") {
+            return (
+              <div key={tab.id} className={`terminal-tab ${activeTab === tab.id ? "active" : "hidden"}`}>
+                <div className="terminal-output" ref={outputRef}>
+                  {tab.output.map((line, i) => (
+                    <div key={i} style={{ color: line.color || "#fff" }}>
+                      {line.text}
+                    </div>
+                  ))}
                 </div>
-              );
-            }
+                <input
+                  className="terminal-input"
+                  placeholder="Enter command..."
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      const cmd = e.target.value.trim();
+                      e.target.value = "";
+                      handleCommand(tab.id, cmd);
+                    }
+                  }}
+                />
+              </div>
+            );
+          }
+
           return null;
         })}
       </div>
