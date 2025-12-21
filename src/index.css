@@ -100,3 +100,23 @@ body {
     height: 100%;
     border: none;
 }
+.tab .close {
+    font-size: 12px;
+    opacity: 0; /* hidden by default */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;      /* small square */
+    height: 16px;
+    border-radius: 3px;
+    transition: opacity 0.2s;
+}
+
+.tab:hover .close {
+    opacity: 0.6;
+}
+
+.tab .close:hover {
+    opacity: 1;
+    background: #333; /* small square background when hovered */
+}
