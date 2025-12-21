@@ -48,9 +48,13 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    if (outputRef.current) outputRef.current.scrollTop = outputRef.current.scrollHeight;
+  }, [tabs]);
+
   window.addEventListener("keydown", handleKey);
   return () => window.removeEventListener("keydown", handleKey);
-}, [tabs]);
+  }, [tabs]);
 
 
   // Refresh only the current tab
