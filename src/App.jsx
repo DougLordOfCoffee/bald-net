@@ -48,9 +48,14 @@ function App() {
     }
   };
 
+  <div className="terminal-output" ref={outputRef}>
+    ...
+  </div>
+  
   useEffect(() => {
     if (outputRef.current) outputRef.current.scrollTop = outputRef.current.scrollHeight;
   }, [tabs]);
+
 
   window.addEventListener("keydown", handleKey);
   return () => window.removeEventListener("keydown", handleKey);
