@@ -1,3 +1,4 @@
+/* Basic layout */
 html, body, #root {
     width: 100%;
     height: 100%;
@@ -24,19 +25,21 @@ body {
     border-bottom: 1px solid #222;
     display: flex;
     align-items: center;
+    justify-content: space-between; /* tabs left, toolbox right */
     padding: 0 10px;
 }
 
-.tab-panel {
-    flex: 1;
-    background: #080808;
+.tabs {
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
+/* Individual tab */
 .tab {
     background: #1a1a1a;
     padding: 6px 12px;
     border-radius: 6px 6px 0 0;
-    margin-right: 6px;
     font-size: 14px;
     border: 1px solid #2a2a2a;
     border-bottom: none;
@@ -46,38 +49,80 @@ body {
     cursor: pointer;
 }
 
-    .tab.active {
-        background: #222;
-        color: #fff;
-    }
+.tab.active {
+    background: #222;
+    color: #fff;
+}
 
-    .tab.add {
-        font-weight: bold;
-        background: transparent;
-        border: 1px dashed #333;
-    }
+.tab.add {
+    font-weight: bold;
+    background: transparent;
+    border: 1px dashed #333;
+}
 
-.close {
+/* Close button */
+.tab .close {
     font-size: 12px;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    transition: opacity 0.2s, background 0.2s;
+}
+
+.tab:hover .close {
     opacity: 0.6;
 }
 
-    .close:hover {
-        opacity: 1;
-    }
+.tab .close:hover {
+    opacity: 1;
+    background: #333;
+    cursor: pointer;
+}
 
-.iframe-app {
+/* Toolbox */
+.tab-tools {
+    display: flex;
+    align-items: center;
+}
+
+.refresh-btn {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 4px;
+    padding: 4px 8px;
+    color: #eaeaea;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.refresh-btn:hover {
+    background: #333;
+}
+
+/* Tab panel */
+.tab-panel {
+    flex: 1;
+    background: #080808;
+}
+
+.iframe-app, .new-tab {
     width: 100%;
     height: 100%;
     border: none;
-    background: black;
+}
+
+.iframe-app.hidden, .new-tab.hidden {
+    display: none;
 }
 
 .new-tab {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
 }
 
 .address-bar {
@@ -88,35 +133,4 @@ body {
     border: 1px solid #333;
     color: white;
     border-radius: 8px;
-}
-
-.hidden {
-    display: none;
-}
-
-.iframe-app,
-.new-tab {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-.tab .close {
-    font-size: 12px;
-    opacity: 0; /* hidden by default */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;      /* small square */
-    height: 16px;
-    border-radius: 3px;
-    transition: opacity 0.2s;
-}
-
-.tab:hover .close {
-    opacity: 0.6;
-}
-
-.tab .close:hover {
-    opacity: 1;
-    background: #333; /* small square background when hovered */
 }
