@@ -44,21 +44,20 @@ function App() {
                         onClick={() => setActiveTab(tab.id)}
                     >
                         {tab.title}
-                        <span
-                            className="close"
-                            onClick={(e) => {
+                            <span
+                              className="close"
+                              onClick={(e) => {
                                 e.stopPropagation();
-
                                 const newTabs = tabs.filter(t => t.id !== tab.id);
                                 setTabs(newTabs);
-
+                            
                                 if (activeTab === tab.id && newTabs.length > 0) {
-                                    setActiveTab(newTabs[0].id);
+                                  setActiveTab(newTabs[0].id);
                                 }
-                            }}
-                        >
-                            X
-                        </span>
+                              }}
+                            >
+                              X
+                            </span>
                     </div>
                 ))}
 
@@ -77,6 +76,22 @@ function App() {
                 >
                     +
                 </div>
+                <span
+                  className="refresh"
+                  onClick={(e) => {
+                    e.stopPropagation(); // don’t activate tab
+                    // Force a re-render of this iframe by changing a "reload" counter
+                    setTabs(tabs => 
+                      tabs.map(t => t.id === tab.id
+                        ? { ...t, reloadCounter: (t.reloadCounter || 0) + 1 }
+                        : t
+                      )
+                    );
+                  }}
+                >
+                  🔄
+                </span>
+
             </div>
 
             <div className="tab-panel">
@@ -84,12 +99,13 @@ function App() {
                     if (tab.type === "iframe") {
                         return (
                             <iframe
-                                key={tab.id}
-                                src={tab.url}
-                                className={`iframe-app ${activeTab === tab.id ? "active" : "hidden"}`}
-                                sandbox="allow-scripts allow-same-origin allow-pointer-lock"
-                                allow="fullscreen; gamepad; autoplay"
+                              key={`${tab.id}-${tab.reloadCounter || 0}`} // changing key forces React to reload iframe
+                              src={tab.url}
+                              className={`iframe-app ${activeTab === tab.id ? "active" : "hidden"}`}
+                              sandbox="allow-scripts allow-same-origin allow-pointer-lock"
+                              allow="fullscreen; gamepad; autoplay"
                             />
+
                         );
                     }
 
