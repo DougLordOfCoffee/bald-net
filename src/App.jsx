@@ -33,6 +33,26 @@ function App() {
     localStorage.setItem("baldnet-active", activeTab);
   }, [tabs, activeTab]);
 
+  useEffect(() => {
+  const handleKey = (e) => {
+    if (e.ctrlKey && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      // Check if terminal exists
+      const termTab = tabs.find(t => t.type === "terminal");
+      if (termTab) setActiveTab(termTab.id);
+      else {
+        const id = `terminal-${Date.now()}`;
+        setTabs([...tabs, { id, title: "Terminal", type: "terminal", output: [] }]);
+        setActiveTab(id);
+      }
+    }
+  };
+
+  window.addEventListener("keydown", handleKey);
+  return () => window.removeEventListener("keydown", handleKey);
+}, [tabs]);
+
+
   // Refresh only the current tab
   const refreshActiveTab = () => {
     setTabs(tabs =>
