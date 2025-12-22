@@ -169,18 +169,6 @@ body {
   flex: 1;
   overflow-y: auto;
   padding-bottom: 4px;
-<<<<<<< HEAD
-=======
-}
-.terminal-input {
-  padding: 8px;
-  font-family: monospace;
-  font-size: 14px;
-  background: #111;
-  border: 1px solid #333;
-  color: #0f0;
-  border-radius: 4px;
->>>>>>> 8b2387d084cdff627bd461ef62597d70fa2e7231
 }
 .terminal-input {
   padding: 8px;
