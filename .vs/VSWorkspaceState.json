@@ -1,9 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\tab-browser",
-    "\\tab-browser\\src"
+    "\\src"
   ],
-  "SelectedNode": "\\tab-browser\\src\\index.css",
+  "SelectedNode": "\\package.json",
   "PreviewInSolutionExplorer": false
 }
