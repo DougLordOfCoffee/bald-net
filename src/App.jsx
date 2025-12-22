@@ -131,7 +131,7 @@ function App() {
         {/* Toolbox */}
         <div className="tab-tools">
           <button className="refresh-btn" onClick={refreshActiveTab}>
-            🔄 Refresh
+            Refresh
           </button>
         </div>
       </div>
