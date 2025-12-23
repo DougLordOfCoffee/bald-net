@@ -100,65 +100,60 @@ function App() {
   return (
     <div className="baldnet">
       <div className="tab-bar">
-        <div className="tabs-container">
-          {tabs.map((tab) => {
-            const isEditing = tab.id === editingTabId;
-            return (
-              <div
-                key={tab.id}
-                className={`tab ${activeTab === tab.id ? "active" : ""}`}
-                draggable
-                onDragStart={() => setDraggingTab(tab.id)}
-                onDragOver={(e) => {
-                    e.preventDefault();
-                    if (draggingTab && draggingTab !== tab.id) {
-                    reorderTabs(draggingTab, tab.id);
-                    }
-                 }}
-                onDragEnd={() => setDraggingTab(null)}
-                onClick={() => setActiveTab(tab.id)}
-                onDoubleClick={() => setEditingTabId(tab.id)}   //This calls the double-clicked input tab name
-              >
-                {isEditing ? (
-                  <input
-                    className="tab-edit-input" // This is the double-clicked input tab name
-                    value={tab.title}
-                    onChange={(e) =>
-                      setTabs(tabs.map((t) => (t.id === tab.id ? { ...t, title: e.target.value } : t)))
-                    }
-                    onBlur={() => setEditingTabId(null)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") setEditingTabId(null);
-                    }}
-                    autoFocus
-                  />
-                ) : (
-                  tab.title
-                )}
-
-                <span
-                  className="close"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    closeTab(tab.id);
-                  }}
-                >
-                  X
-                </span>
-              </div>
-            );
-          })}
-          <div className="tab add" onClick={addTab}>
-            +
-          </div>
-        </div>
-
         <div className="tabs-wrapper">
-            <div className="tabs">
-                {tabs.map((t))}
+            <div className="tabs-container">
+                {tabs.map((tab) => {
+                const isEditing = tab.id === editingTabId;
+                return (
+                    <div
+                    key={tab.id}
+                    className={`tab ${activeTab === tab.id ? "active" : ""}`}
+                    draggable
+                    onDragStart={() => setDraggingTab(tab.id)}
+                    onDragOver={(e) => {
+                        e.preventDefault();
+                        if (draggingTab && draggingTab !== tab.id) {
+                        reorderTabs(draggingTab, tab.id);
+                        }
+                    }}
+                    onDragEnd={() => setDraggingTab(null)}
+                    onClick={() => setActiveTab(tab.id)}
+                    onDoubleClick={() => setEditingTabId(tab.id)}
+                    >
+                    {isEditing ? (
+                        <input
+                        className="tab-edit-input"
+                        value={tab.title}
+                        onChange={(e) =>
+                            setTabs(tabs.map(t =>
+                            t.id === tab.id ? { ...t, title: e.target.value } : t
+                            ))
+                        }
+                        onBlur={() => setEditingTabId(null)}
+                        onKeyDown={(e) => e.key === "Enter" && setEditingTabId(null)}
+                        autoFocus
+                        />
+                    ) : (
+                        tab.title
+                    )}
+
+                    <span
+                        className="close"
+                        onClick={(e) => {
+                        e.stopPropagation();
+                        closeTab(tab.id);
+                        }}
+                    >
+                        X
+                    </span>
+                    </div>
+                );
+                })}
+
                 <div className="tab add" onClick={addTab}>+</div>
             </div>
-        </div>
+            </div>
+
 
         {/* Toolbox */}
         <div className="tab-tools">
