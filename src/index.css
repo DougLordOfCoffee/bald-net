@@ -1,14 +1,39 @@
-/* Layout */
+:root {
+  /* Colors */
+  --bg-main: #0a0a0a;
+  --bg-panel: #080808;
+  --bg-header: #111;
+  --bg-tab-active: #222;
+  --bg-input: #1a1a1a;
+  --border-color: #222;
+  --border-light: #333;
+  --text-main: #eaeaea;
+  --text-dim: #888;
+  --accent-color: #444;
+  --terminal-green: #0f0;
+
+  /* Dimensions */
+  --tab-height: 28px;
+  --header-height: 42px;
+}
+
+/* 1. Base Reset & Layout */
+* {
+  box-sizing: border-box;
+}
+
 html, body, #root {
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
 }
+
 body {
-  background: #0a0a0a;
-  color: #eaeaea;
-  font-family: system-ui, sans-serif;
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, sans-serif;
+  overflow: hidden;
 }
 
 .baldnet {
@@ -18,50 +43,73 @@ body {
   height: 100%;
 }
 
-/* Tab bar */
+/* 2. Tab Bar Navigation */
 .tab-bar {
-  height: 42px;
-  background: #111;
-  border-bottom: 1px solid #222;
+  height: var(--header-height);
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 10px;
 }
 
+.tabs-wrapper {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Fade gradients for scrolling tabs */
+.tabs-wrapper::before,
+.tabs-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 24px;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+.tabs-wrapper::before { left: 0; background: linear-gradient(to right, var(--bg-header), transparent); }
+.tabs-wrapper::after { right: 0; background: linear-gradient(to left, var(--bg-header), transparent); }
+
 .tabs-container {
   display: flex;
   align-items: center;
   gap: 6px;
   overflow-x: auto;
-  flex: 1;
-  scrollbar-width: thin;
+  scrollbar-width: none; /* Firefox */
+  padding-right: 24px;
 }
+
 .tabs-container::-webkit-scrollbar {
-  height: 6px;
-}
-.tabs-container::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 3px;
+  display: none; /* Chrome/Safari */
 }
 
-/* Tabs */
+/* 3. Individual Tabs */
 .tab {
-  height: 28px;          
-  padding: 0 10px;        
-  line-height: 28px;      
+  height: var(--tab-height);
+  padding: 0 10px;
   font-size: 13px;
-
   display: flex;
   align-items: center;
   gap: 6px;
   border-radius: 5px 5px 0 0;
+  flex-shrink: 0;
+  cursor: grab;
+  user-select: none;
+  transition: background 0.2s;
 }
+
+.tab:active { cursor: grabbing; }
+
 .tab.active {
-  background: #222;
+  background: var(--bg-tab-active);
   color: #fff;
-  box-shadow: inset 0 -2px 0 #444;
+  box-shadow: inset 0 -2px 0 var(--accent-color);
 }
+
 .tab.add {
   width: 32px;
   min-width: 32px;
@@ -71,8 +119,7 @@ body {
   font-weight: bold;
 }
 
-
-/* Close button */
+/* Close Button */
 .tab .close {
   font-size: 12px;
   opacity: 0;
@@ -82,98 +129,99 @@ body {
   width: 16px;
   height: 16px;
   border-radius: 3px;
-  transition: opacity 0.2s, background 0.2s;
+  transition: all 0.2s;
 }
-.tab:hover .close {
-  opacity: 0.6;
-}
+
+.tab:hover .close { opacity: 0.6; }
 .tab .close:hover {
   opacity: 1;
-  background: #333;
+  background: var(--border-light);
   cursor: pointer;
 }
 
-/* Tab input editing */
-.tab-edit-input {
-  width: 100%;
-  height: 100%;
-  font-size: 14px;
-  padding: 2px 4px;
-  border-radius: 4px;
-  border: 1px solid #555;
-  background: #222;
-  color: #fff;
-  box-sizing: border-box;
-}
-
-/* Toolbox */
-.tab-tools {
-  display: flex;
-  align-items: center;
-}
-.refresh-btn {
-  background: #1a1a1a;
-  border: 1px solid #2a2a2a;
-  border-radius: 4px;
-  padding: 4px 8px;
-  color: #eaeaea;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.refresh-btn:hover {
-  background: #333;
-}
-
-/* Tab panel */
+/* 4. Tab Panel & Content */
 .tab-panel {
   flex: 1;
-  background: #080808;
+  background: var(--bg-panel);
+  position: relative;
 }
+
 .iframe-app, .new-tab {
   width: 100%;
   height: 100%;
   border: none;
 }
-.iframe-app.hidden, .new-tab.hidden {
-  display: none;
-}
+
+.hidden { display: none !important; }
+
+/* New Tab / Address Bar */
 .new-tab {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .address-bar {
   width: 60%;
   padding: 12px;
   font-size: 16px;
-  background: #111;
-  border: 1px solid #333;
-  color: white;
+  background: var(--bg-header);
+  border: 1px solid var(--border-light);
+  color: #fff;
   border-radius: 8px;
+  outline: none;
 }
 
-/* Terminal */
+.address-bar:focus { border-color: var(--accent-color); }
+
+/* 5. Terminal & Inputs */
 .terminal-tab {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   background: #000;
-  color: #0f0;
-  font-family: monospace;
+  color: var(--terminal-green);
+  font-family: 'Fira Code', monospace;
   padding: 8px;
 }
+
 .terminal-output {
   flex: 1;
   overflow-y: auto;
   padding-bottom: 4px;
 }
-.terminal-input {
-  padding: 8px;
+
+.terminal-input, .tab-edit-input {
   font-family: monospace;
-  font-size: 14px;
-  background: #111;
-  border: 1px solid #333;
-  color: #0f0;
+  background: var(--bg-header);
+  border: 1px solid var(--border-light);
+  color: var(--terminal-green);
   border-radius: 4px;
+  padding: 8px;
 }
+
+.tab-edit-input {
+  color: #fff;
+  font-size: 14px;
+  padding: 2px 4px;
+}
+
+/* 6. Tools */
+.tab-tools {
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+}
+
+.refresh-btn {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.refresh-btn:hover { background: var(--border-light); }

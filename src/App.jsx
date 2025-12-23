@@ -3,6 +3,8 @@ import { useState, useEffect, useRef } from "react";
 function App() {
   const STORAGE_KEY = "baldnet-tabs";
   const outputRef = useRef(null);
+  const [draggingTab, setDraggingTab] = useState(null);
+
 
   const [tabs, setTabs] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -14,6 +16,20 @@ function App() {
           { id: "terminal", title: "Terminal", type: "terminal", output: [] },
         ];
   });
+
+  const reorderTabs = (fromId, toId) => {
+    if (fromId === toId) return;
+
+    const fromIndex = tabs.findIndex(t => t.id === fromId);
+    const toIndex = tabs.findIndex(t => t.id === toId);
+
+    const updated = [...tabs];
+    const [moved] = updated.splice(fromIndex, 1);
+    updated.splice(toIndex, 0, moved);
+
+    setTabs(updated);
+    };
+
 
   const [activeTab, setActiveTab] = useState(() => localStorage.getItem("baldnet-active") || "dome");
   const [editingTabId, setEditingTabId] = useState(null);
@@ -91,12 +107,21 @@ function App() {
               <div
                 key={tab.id}
                 className={`tab ${activeTab === tab.id ? "active" : ""}`}
+                draggable
+                onDragStart={() => setDraggingTab(tab.id)}
+                onDragOver={(e) => {
+                    e.preventDefault();
+                    if (draggingTab && draggingTab !== tab.id) {
+                    reorderTabs(draggingTab, tab.id);
+                    }
+                 }}
+                onDragEnd={() => setDraggingTab(null)}
                 onClick={() => setActiveTab(tab.id)}
-                onDoubleClick={() => setEditingTabId(tab.id)}
+                onDoubleClick={() => setEditingTabId(tab.id)}   //This calls the double-clicked input tab name
               >
                 {isEditing ? (
                   <input
-                    className="tab-edit-input"
+                    className="tab-edit-input" // This is the double-clicked input tab name
                     value={tab.title}
                     onChange={(e) =>
                       setTabs(tabs.map((t) => (t.id === tab.id ? { ...t, title: e.target.value } : t)))
@@ -126,6 +151,13 @@ function App() {
           <div className="tab add" onClick={addTab}>
             +
           </div>
+        </div>
+
+        <div className="tabs-wrapper">
+            <div className="tabs">
+                {tabs.map((t))}
+                <div className="tab add" onClick={addTab}>+</div>
+            </div>
         </div>
 
         {/* Toolbox */}
