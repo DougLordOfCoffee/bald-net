@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import TabBar from "./components/TabBar";
+import TabBar from "./components/TabBar.jsx";
 import TabPanel from "./components/TabPanel";
 
 const STORAGE_KEY = "baldnet-tabs";
