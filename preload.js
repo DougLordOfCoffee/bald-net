@@ -11,5 +11,4 @@ contextBridge.exposeInMainWorld("baldnet", {
   navigate: (url) => ipcRenderer.send("navigate", url),
   onUrlUpdate: (cb) => ipcRenderer.on("url-updated", (_, id, url) => cb(id, url)),
   onTitleUpdate: (cb) => ipcRenderer.on("title-updated", (_, id, title) => cb(id, title)),
-
 });
