@@ -8,6 +8,8 @@ let win;
 const views = new Map();
 let activeTabId = null;
 const TAB_BAR_HEIGHT = 48;
+const ADDRESS_BAR_HEIGHT = 36;
+const TOTAL_OFFSET = TAB_BAR_HEIGHT + ADDRESS_BAR_HEIGHT;
 
 function createWindow() {
   win = new BrowserWindow({
@@ -30,9 +32,9 @@ function updateViewBounds(view) {
   const bounds = win.getContentBounds();
   view.setBounds({
     x: 0,
-    y: TAB_BAR_HEIGHT,
+    y: TOTAL_OFFSET, // Now 84px from the top
     width: bounds.width,
-    height: bounds.height - TAB_BAR_HEIGHT
+    height: bounds.height - TOTAL_OFFSET
   });
 }
 

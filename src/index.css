@@ -215,3 +215,100 @@ body {
   border-color: var(--text-ethereal);
   color: white;
 }
+
+/* New Top Address Bar Styling */
+.header-address-bar {
+  height: 36px;
+  background: #050505;
+  border-bottom: 1px solid #1a1a1a;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.view-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Scanline Effect */
+.terminal-view {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanlines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.1) 50%
+  ), linear-gradient(
+    90deg, 
+    rgba(255, 0, 0, 0.03), 
+    rgba(0, 255, 0, 0.01), 
+    rgba(0, 0, 255, 0.03)
+  );
+  background-size: 100% 3px, 3px 100%;
+  pointer-events: none; /* Let clicks pass through */
+  z-index: 10;
+}
+
+/* Add a faint flicker animation to the scanlines */
+@keyframes flicker {
+  0% { opacity: 0.97; }
+  5% { opacity: 0.95; }
+  10% { opacity: 0.9; }
+  15% { opacity: 0.95; }
+  100% { opacity: 1; }
+}
+
+.terminal-view.active-view {
+  animation: flicker 0.1s infinite;
+}
+
+/* Status Indicator */
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.status-indicator.online {
+  background: #00ff41;
+  box-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
+  animation: pulse-green 2s infinite ease-in-out;
+}
+
+@keyframes pulse-green {
+  0% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 0.4; transform: scale(0.9); }
+}
+
+/* Ensure the header bar is flex */
+.header-address-bar {
+  height: 36px;
+  background: #050505;
+  border-bottom: 1px solid #1a1a1a;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+}
+
+.address-bar {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #666;
+  font-family: monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  outline: none;
+}
