@@ -60,7 +60,7 @@ function App() {
     }
     window.baldnet?.closeTab(tabId);
   };
-  
+
   const activateTab = (tabId) => {
   setActiveTab(tabId);
 
@@ -126,6 +126,14 @@ function App() {
             </div>
           ))}
           <div className="tab add" onClick={addTab}>+</div>
+
+          {/*---------- TAB TOOLS ---------- */}
+          <div className="tab-tools">
+            <button onClick={() => window.baldnet?.back()}>◀</button>
+            <button onClick={() => window.baldnet?.forward()}>▶</button>
+            <button onClick={() => window.baldnet?.refresh()}>⟳</button>
+          </div>
+
         </div>
       </div>
 

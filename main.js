@@ -102,26 +102,30 @@ ipcMain.on("close-tab", (_, tabId) => {
   closeTab(tabId);
 });
 
-ipcMain.on("refresh-tab", () => {
-  if (activeTabId && views.has(activeTabId)) {
-    views.get(activeTabId).webContents.reload();
-  }
-});
-
 ipcMain.on("nav-back", () => {
   const v = views.get(activeTabId);
-  v?.webContents.canGoBack() && v.webContents.goBack();
+  if (v?.webContents.canGoBack()) {
+    v.webContents.goBack();
+  }
 });
 
 ipcMain.on("nav-forward", () => {
   const v = views.get(activeTabId);
-  v?.webContents.canGoForward() && v.webContents.goForward();
+  if (v?.webContents.canGoForward()) {
+    v.webContents.goForward();
+  }
+});
+
+ipcMain.on("refresh-tab", () => {
+  const v = views.get(activeTabId);
+  v?.webContents.reload();
 });
 
 ipcMain.on("navigate", (_, url) => {
   const v = views.get(activeTabId);
   v?.webContents.loadURL(url);
 });
+
 
 /* ---------- lifecycle ---------- */
 
