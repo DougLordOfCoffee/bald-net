@@ -60,11 +60,18 @@ function App() {
     }
     window.baldnet?.closeTab(tabId);
   };
-
+  
   const activateTab = (tabId) => {
-    setActiveTab(tabId);
+  setActiveTab(tabId);
+
+  const tab = tabs.find(t => t.id === tabId);
+
+  if (tab?.type === "browser") {
     window.baldnet?.activateTab(tabId);
-  };
+  } else {
+    window.baldnet?.hideDisplays();
+  }
+};
 
   /** ---------- TERMINAL ---------- */
 

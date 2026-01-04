@@ -19,6 +19,11 @@ function createWindow() {
   });
 
   win.loadURL("http://localhost:5173");
+
+    win.webContents.once("did-finish-load", () => {
+        createTab("dome", "https://the-bald-chat.web.app");
+        createTab("astrominer", "https://randydomke.github.io/Astrominer");
+    });
 }
 
 function createTab(tabId, url) {
@@ -76,6 +81,15 @@ function closeTab(tabId) {
 
 /* ---------- IPC ---------- */
 
+ipcMain.on("hide-displays", () => {
+  if (activeTabId && views.has(activeTabId)) {
+    win.removeBrowserView(views.get(activeTabId));
+    activeTabId = null;
+  }
+});
+
+//^display vs. no display tab management
+
 ipcMain.on("new-tab", (_, tabId, url) => {
   createTab(tabId, url);
 });
@@ -92,6 +106,21 @@ ipcMain.on("refresh-tab", () => {
   if (activeTabId && views.has(activeTabId)) {
     views.get(activeTabId).webContents.reload();
   }
+});
+
+ipcMain.on("nav-back", () => {
+  const v = views.get(activeTabId);
+  v?.webContents.canGoBack() && v.webContents.goBack();
+});
+
+ipcMain.on("nav-forward", () => {
+  const v = views.get(activeTabId);
+  v?.webContents.canGoForward() && v.webContents.goForward();
+});
+
+ipcMain.on("navigate", (_, url) => {
+  const v = views.get(activeTabId);
+  v?.webContents.loadURL(url);
 });
 
 /* ---------- lifecycle ---------- */
