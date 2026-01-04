@@ -4,6 +4,8 @@ function App() {
   const STORAGE_KEY = "baldnet-tabs";
   const outputRef = useRef(null);
   const [draggingTab, setDraggingTab] = useState(null);
+  const [address, setAddress] = useState("");
+
 
   const [tabs, setTabs] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -31,6 +33,24 @@ function App() {
       outputRef.current.scrollTop = outputRef.current.scrollHeight;
     }
   }, [tabs]);
+
+  useEffect(() => {
+    window.baldnet?.onUrlUpdate((id, url) => {
+      if (id === activeTab) {
+        setAddress(url);
+      }
+    });
+  }, [activeTab]);
+
+  useEffect(() => {
+    window.baldnet?.onTitleUpdate((id, title) => {
+      setTabs(tabs =>
+        tabs.map(t => t.id === id ? { ...t, title } : t)
+      );
+    });
+  }, []);
+
+
 
   /** ---------- TAB MANAGEMENT ---------- */
 
@@ -183,6 +203,20 @@ function App() {
 
           return null;
         })}
+        <input
+          className="address-bar"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              const url = address.startsWith("http")
+                ? address
+                : `https://${address}`;
+              window.baldnet?.navigate(url);
+            }
+          }}
+        />
+
       </div>
     </div>
   );

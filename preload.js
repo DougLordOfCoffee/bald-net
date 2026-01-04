@@ -9,4 +9,7 @@ contextBridge.exposeInMainWorld("baldnet", {
   back: () => ipcRenderer.send("nav-back"),
   forward: () => ipcRenderer.send("nav-forward"),
   navigate: (url) => ipcRenderer.send("navigate", url),
+  onUrlUpdate: (cb) => ipcRenderer.on("url-updated", (_, id, url) => cb(id, url)),
+  onTitleUpdate: (cb) => ipcRenderer.on("title-updated", (_, id, title) => cb(id, title)),
+
 });

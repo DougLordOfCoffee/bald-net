@@ -24,6 +24,18 @@ function createWindow() {
         createTab("dome", "https://the-bald-chat.web.app");
         createTab("astrominer", "https://randydomke.github.io/Astrominer");
     });
+
+    view.webContents.on("did-navigate", (_, url) => {
+        win.webContents.send("url-updated", tabId, url);
+    });
+
+    view.webContents.on("did-navigate-in-page", (_, url) => {
+        win.webContents.send("url-updated", tabId, url);
+    });
+
+    view.webContents.on("page-title-updated", (_, title) => {
+      win.webContents.send("title-updated", tabId, title);
+    });
 }
 
 function createTab(tabId, url) {
@@ -31,7 +43,8 @@ function createTab(tabId, url) {
 
   const view = new BrowserView({
     webPreferences: {
-      sandbox: true
+      sandbox:
+       true
     }
   });
 
@@ -104,15 +117,15 @@ ipcMain.on("close-tab", (_, tabId) => {
 
 ipcMain.on("nav-back", () => {
   const v = views.get(activeTabId);
-  if (v?.webContents.canGoBack()) {
-    v.webContents.goBack();
+  if (v?.webContents.navigationHistory.canGoBack()) {
+    v.webContents.navigationHistory.goBack();
   }
 });
 
 ipcMain.on("nav-forward", () => {
   const v = views.get(activeTabId);
-  if (v?.webContents.canGoForward()) {
-    v.webContents.goForward();
+  if (v?.webContents.navigationHistory.canGoForward()) {
+    v.webContents.navigationHistory.goForward();
   }
 });
 
