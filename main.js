@@ -1,29 +1,39 @@
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
+const { BrowserView } = require("electron");
+const { ipcMain } = require("electron");
 
-function createWindow() {
-    const win = new BrowserWindow({
-        width: 1200,
-        height: 800,
-        webPreferences: {
-            preload: path.join(__dirname, "preload.js"),
-            nodeIntegration: true,
-            contextIsolation: false
-        }
-    });
+let win;
+let views = [];
 
-    // Load your React build
-    win.loadFile(path.join(__dirname, "dist/index.html"));
+function createTab(url) {
+  const view = new BrowserView({
+    webPreferences: {
+      sandbox: true
+    }
+  });
+
+
+  win.setBrowserView(view);
+  view.setBounds({ x: 0, y: 60, width: 1200, height: 740 });
+  view.webContents.loadURL(url);
+  
+    views.push(view);
+  return views.length - 1;
 }
 
 app.whenReady().then(() => {
-    createWindow();
+  win = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js")
+    }
+  });
 
-    app.on("activate", () => {
-        if (BrowserWindow.getAllWindows().length === 0) createWindow();
-    });
+  win.loadURL("http://localhost:5173"); // dev
 });
 
-app.on("window-all-closed", () => {
-    if (process.platform !== "darwin") app.quit();
+ipcMain.on("new-tab", (_, url) => {
+  createTab(url);
 });
