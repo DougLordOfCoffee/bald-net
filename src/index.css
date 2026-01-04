@@ -1,230 +1,217 @@
 :root {
-  /* Colors */
-  --bg-main: #0a0a0a;
-  --bg-panel: #080808;
-  --bg-header: #111;
-  --bg-tab-active: #222;
-  --bg-input: #1a1a1a;
-  --border-color: #222;
-  --border-light: #333;
-  --text-main: #eaeaea;
-  --text-dim: #888;
-  --accent-color: #444;
-  --terminal-green: #0f0;
+  /* The Void Palette */
+  --bg-void: #000000;           /* Total darkness */
+  --bg-monolith: #050505;       /* The solid structure */
+  --bg-glass: rgba(10, 10, 10, 0.8);
+  --fog-glow: rgba(255, 255, 255, 0.03); /* The distant moon light */
+  
+  --border-sharp: #1a1a1a;      /* Sharp edges of the monolith */
+  --border-active: #333333;     /* Slight glint on the active tab */
+  
+  --text-ethereal: #999999;     /* Dim light */
+  --text-active: #ffffff;
+  --terminal-phosphor: #00ff41; /* Classic matrix green */
 
-  /* Dimensions */
-  --tab-height: 28px;
-  --header-height: 42px;
+  --header-height: 48px;
+  --footer-height: 40px;
 }
 
-/* 1. Base Reset & Layout */
-* {
-  box-sizing: border-box;
-}
-
-html, body, #root {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
+/* 1. Reset & Global Fog */
+* { box-sizing: border-box; }
 
 body {
-  background: var(--bg-main);
-  color: var(--text-main);
-  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--bg-void);
+  color: var(--text-ethereal);
+  font-family: "Inter", -apple-system, monospace;
+  margin: 0;
   overflow: hidden;
+  /* Subtle light fog effect in the background */
+  background-image: radial-gradient(circle at 50% -20%, var(--fog-glow), transparent);
 }
 
 .baldnet {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 }
 
-/* 2. Tab Bar Navigation */
+/* 2. The Tab Bar (Monolith Top) */
 .tab-bar {
   height: var(--header-height);
-  background: var(--bg-header);
-  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-monolith);
+  border-bottom: 1px solid var(--border-sharp);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 10px;
-  overflow: hidden;
+  padding: 0 12px;
+  z-index: 10;
 }
-
-.tabs-wrapper {
-  position: relative;
-  flex: 1;
-  overflow: hidden;
-}
-
-/* Fade gradients for scrolling tabs */
-.tabs-wrapper::before,
-.tabs-wrapper::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  width: 24px;
-  height: 100%;
-  pointer-events: none;
-  z-index: 5;
-}
-.tabs-wrapper::before { left: 0; background: linear-gradient(to right, var(--bg-header), transparent); }
-.tabs-wrapper::after { right: 0; background: linear-gradient(to left, var(--bg-header), transparent); }
 
 .tabs-container {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
-  padding-right: 24px;
+  align-items: flex-end;
+  gap: 2px; /* Razor thin gap */
+  flex: 1;
+  height: 100%;
 }
 
-.tabs-container::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
-}
-
-/* 3. Individual Tabs */
 .tab {
-  height: var(--tab-height);
-  padding: 0 10px;
-  font-size: 13px;
+  height: 32px;
+  min-width: 120px;
+  max-width: 200px;
+  padding: 0 12px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
   display: flex;
   align-items: center;
-  gap: 6px;
-  border-radius: 5px 5px 0 0;
-  flex-shrink: 0;
-  cursor: grab;
-  user-select: none;
-  transition: background 0.2s;
+  justify-content: space-between;
+  background: #080808;
+  border: 1px solid var(--border-sharp);
+  border-bottom: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--text-ethereal);
 }
 
-.tab:active { cursor: grabbing; }
-
 .tab.active {
-  background: var(--bg-tab-active);
-  color: #fff;
-  box-shadow: inset 0 -2px 0 var(--accent-color);
+  background: var(--bg-monolith);
+  border-color: var(--border-active);
+  color: var(--text-active);
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.5); /* Lifted monolith look */
+}
+
+.tab:hover:not(.active) {
+  background: #111;
 }
 
 .tab.add {
-  width: 32px;
   min-width: 32px;
-  padding: 0;
   justify-content: center;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-/* Close Button */
-.tab .close {
-  font-size: 12px;
-  opacity: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
-  border-radius: 3px;
-  transition: all 0.2s;
-}
-
-.tab:hover .close { opacity: 0.6; }
-.tab .close:hover {
-  opacity: 1;
-  background: var(--border-light);
-  cursor: pointer;
-}
-
-/* 4. Tab Panel & Content */
-.tab-panel {
-  display: flex;     
-  flex-direction: column; 
-  flex: 1;            
-  min-height: 0;      
-  background: #080808;
-}
-
-.iframe-app, .new-tab, .terminal-tab {
-  flex: 1;
-  width: 100%;
-  height: 100%;
-}
-
-.hidden { display: none !important; }
-
-/* New Tab / Address Bar */
-.new-tab {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.address-bar {
-  width: 60%;
-  padding: 12px;
   font-size: 16px;
-  background: var(--bg-header);
-  border: 1px solid var(--border-light);
-  color: #fff;
-  border-radius: 8px;
-  outline: none;
 }
 
-.address-bar:focus { border-color: var(--accent-color); }
+.close {
+  opacity: 0.3;
+  font-family: monospace;
+  margin-left: 8px;
+}
 
-/* 5. Terminal & Inputs */
-.terminal-tab {
-  width: 100%;
-  height: 100%;
+.tab:hover .close { opacity: 1; }
+
+/* 3. Panel & Content Views */
+.tab-panel {
+  flex: 1;
+  position: relative;
+  background: var(--bg-void);
+}
+
+.active-view {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.hidden-view { display: none; }
+
+/* 4. Terminal (The Core) */
+.terminal-view {
+  flex: 1;
+  padding: 20px;
+  font-family: 'Fira Code', 'Courier New', monospace;
   background: #000;
-  color: var(--terminal-green);
-  font-family: 'Fira Code', monospace;
-  padding: 8px;
 }
 
 .terminal-output {
   flex: 1;
   overflow-y: auto;
-  padding-bottom: 4px;
+  font-size: 13px;
+  line-height: 1.6;
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.2); /* Soft phosphor glow */
 }
 
-.terminal-input, .tab-edit-input {
-  font-family: monospace;
-  background: var(--bg-header);
-  border: 1px solid var(--border-light);
-  color: var(--terminal-green);
-  border-radius: 4px;
-  padding: 8px;
+.terminal-input-row {
+  display: flex;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #111;
 }
 
-.tab-edit-input {
-  color: #fff;
+.terminal-input-row input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--terminal-phosphor);
+  flex: 1;
+  font-family: inherit;
+}
+
+/* 5. Address Bars (The Interfaces) */
+.new-tab-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Visual of a monolith in the distance */
+  background: radial-gradient(circle at center, #0a0a0a 0%, transparent 70%);
+}
+
+.address-bar-large {
+  width: 400px;
+  background: transparent;
+  border: 1px solid var(--border-sharp);
+  padding: 15px;
+  color: white;
+  text-align: center;
   font-size: 14px;
-  padding: 2px 4px;
+  letter-spacing: 2px;
+  outline: none;
+  transition: border 0.5s;
 }
 
-/* 6. Tools */
-.tab-tools {
+.address-bar-large:focus {
+  border-color: #444;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.02);
+}
+
+.footer-address-bar {
+  height: var(--footer-height);
+  background: var(--bg-monolith);
+  border-top: 1px solid var(--border-sharp);
+  padding: 0 10px;
   display: flex;
   align-items: center;
-  padding-left: 8px;
 }
 
-.refresh-btn {
-  background: var(--bg-input);
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  padding: 4px 8px;
-  color: var(--text-main);
+.address-bar {
+  width: 100%;
+  background: #000;
+  border: 1px solid var(--border-sharp);
+  color: #666;
+  padding: 4px 10px;
+  font-size: 12px;
+  outline: none;
+}
+
+/* 6. Navigation Tools */
+.tab-tools {
+  display: flex;
+  gap: 5px;
+  margin-left: 15px;
+}
+
+.tab-tools button {
+  background: transparent;
+  border: 1px solid var(--border-sharp);
+  color: var(--text-ethereal);
   cursor: pointer;
-  transition: background 0.2s;
+  padding: 2px 8px;
+  font-size: 10px;
+  transition: 0.2s;
 }
 
-.refresh-btn:hover { background: var(--border-light); }
+.tab-tools button:hover {
+  border-color: var(--text-ethereal);
+  color: white;
+}
