@@ -1,3 +1,5 @@
+import { fileURLToPath } from 'url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 import { app, BrowserWindow, BrowserView, ipcMain } from 'electron';
 import path from 'path';
 
