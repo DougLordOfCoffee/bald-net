@@ -1,7 +1,5 @@
-const { app, BrowserWindow } = require("electron");
-const path = require("path");
-const { BrowserView } = require("electron");
-const { ipcMain } = require("electron");
+import { app, BrowserWindow, BrowserView, ipcMain } from 'electron';
+import path from 'path';
 
 let win;
 let views = [];
