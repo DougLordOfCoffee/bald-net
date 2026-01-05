@@ -5,7 +5,7 @@
   --bg-glass: rgba(10, 10, 10, 0.8);
   --fog-glow: rgba(255, 255, 255, 0.03); /* The distant moon light */
   
-  --border-sharp: #1a1a1a;      /* Sharp edges of the monolith */
+  --border-sharp: #1a1a1a;      /* Sharp edges */
   --border-active: #333333;     /* Slight glint on the active tab */
   
   --text-ethereal: #999999;     /* Dim light */
@@ -36,7 +36,7 @@ body {
   height: 100vh;
 }
 
-/* 2. The Tab Bar (Monolith Top) */
+/* 2. The Tab Bar  */
 .tab-bar {
   height: var(--header-height);
   background: var(--bg-monolith);
@@ -50,7 +50,7 @@ body {
 .tabs-container {
   display: flex;
   align-items: flex-end;
-  gap: 2px; /* Razor thin gap */
+  gap: 10 px;
   flex: 1;
   height: 100%;
 }
@@ -78,7 +78,7 @@ body {
   background: var(--bg-monolith);
   border-color: var(--border-active);
   color: var(--text-active);
-  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.5); /* Lifted monolith look */
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.5); 
 }
 
 .tab:hover:not(.active) {
@@ -115,7 +115,7 @@ body {
 
 .hidden-view { display: none; }
 
-/* 4. Terminal (The Core) */
+/* 4. Terminal */
 .terminal-view {
   flex: 1;
   padding: 20px;
@@ -128,7 +128,7 @@ body {
   overflow-y: auto;
   font-size: 13px;
   line-height: 1.6;
-  text-shadow: 0 0 5px rgba(0, 255, 65, 0.2); /* Soft phosphor glow */
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.2); /* Soft glow */
 }
 
 .terminal-input-row {
@@ -147,27 +147,28 @@ body {
   font-family: inherit;
 }
 
-/* 5. Address Bars (The Interfaces) */
+/* 5. Address Bars  */
 .new-tab-center {
-  flex: 1;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  /* Visual of a monolith in the distance */
-  background: radial-gradient(circle at center, #0a0a0a 0%, transparent 70%);
+  flex-direction: column;
+  justify-content: center; /* Vertical centering */
+  align-items: center;     /* Horizontal centering */
+  width: 100%;
+  height: 100%;            /* Fill the entire panel height */
+  background: var(--bg-void); 
 }
 
 .address-bar-large {
-  width: 400px;
-  background: transparent;
+  width: 100%;
+  max-width: 500px;        /* Limits how wide it gets on big screens */
+  padding: 18px;
+  font-size: 18px;
+  background: #000;
   border: 1px solid var(--border-sharp);
-  padding: 15px;
-  color: white;
+  color: #fff;
   text-align: center;
-  font-size: 14px;
-  letter-spacing: 2px;
   outline: none;
-  transition: border 0.5s;
+  transition: border-color 0.3s ease;
 }
 
 .address-bar-large:focus {

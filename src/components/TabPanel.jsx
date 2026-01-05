@@ -42,7 +42,7 @@ function TabPanel({ tabs, setTabs, activeTabId, address, setAddress }) {
         <div className="status-indicator online"></div>
         <input
           className="address-bar"
-          placeholder="COMMUNICATION CHANNEL..."
+          placeholder="Current URLs appear here."
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           onKeyDown={(e) => {
@@ -64,7 +64,7 @@ function TabPanel({ tabs, setTabs, activeTabId, address, setAddress }) {
                 <div className="new-tab-center">
                   <input
                     className="address-bar-large"
-                    placeholder="ENTER THE VOID..."
+                    placeholder="Enter URL..."
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         const url = formatUrl(e.target.value);
