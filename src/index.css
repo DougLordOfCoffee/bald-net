@@ -50,7 +50,7 @@ body {
 .tabs-container {
   display: flex;
   align-items: flex-end;
-  gap: 10 px;
+  gap: 2 px;
   flex: 1;
   height: 100%;
 }
