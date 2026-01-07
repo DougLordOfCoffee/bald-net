@@ -49,6 +49,11 @@ function createTab(tabId, url) {
   view.webContents.on("did-navigate", (_, url) => win.webContents.send("url-updated", tabId, url));
   view.webContents.on("did-navigate-in-page", (_, url) => win.webContents.send("url-updated", tabId, url));
   view.webContents.on("page-title-updated", (_, title) => win.webContents.send("title-updated", tabId, title));
+  view.webContents.on("page-favicon-updated", (_, favicons) => {
+    if (favicons && favicons.length > 0) {
+      win.webContents.send("favicon-updated", tabId, favicons[0]);
+    }
+  });
   
   // Connection status events
   view.webContents.on("did-start-loading", () => win.webContents.send("connection-status", tabId, "loading"));

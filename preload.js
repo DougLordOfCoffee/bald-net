@@ -26,4 +26,9 @@ contextBridge.exposeInMainWorld("baldnet", {
     ipcRenderer.on("connection-status", handler);
     return () => ipcRenderer.removeListener("connection-status", handler);
   },
+  onFaviconUpdate: (cb) => {
+    const handler = (_, id, faviconUrl) => cb(id, faviconUrl);
+    ipcRenderer.on("favicon-updated", handler);
+    return () => ipcRenderer.removeListener("favicon-updated", handler);
+  },
 });

@@ -28,13 +28,25 @@ function App() {
     return saved ? JSON.parse(saved) : [];
   });
 
-  // Create BrowserViews for initial browser tabs
+  // Create BrowserViews for initial browser tabs and activate the current tab
   useEffect(() => {
+    // First create all browser views
     tabs.forEach(tab => {
       if (tab.type === "browser" && tab.url) {
         window.baldnet?.newTab(tab.id, tab.url);
       }
     });
+    
+    // Then activate the current tab
+    if (activeTabId) {
+      const currentTab = tabs.find(t => t.id === activeTabId);
+      if (currentTab) {
+        handleActivateTab(activeTabId);
+      } else if (tabs.length > 0) {
+        // If active tab doesn't exist, activate the first tab
+        handleActivateTab(tabs[0].id);
+      }
+    }
   }, []); // Only run once on mount
 
   // Keyboard shortcuts
@@ -97,10 +109,14 @@ function App() {
     const cleanupTitle = window.baldnet?.onTitleUpdate((id, title) => {
       setTabs(prev => prev.map(t => t.id === id ? { ...t, title } : t));
     });
+    const cleanupFavicon = window.baldnet?.onFaviconUpdate((id, faviconUrl) => {
+      setTabs(prev => prev.map(t => t.id === id ? { ...t, favicon: faviconUrl } : t));
+    });
 
     return () => {
       cleanupUrl?.();
       cleanupTitle?.();
+      cleanupFavicon?.();
     };
   }, [activeTabId]);
 

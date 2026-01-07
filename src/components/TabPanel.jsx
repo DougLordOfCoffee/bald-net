@@ -4,6 +4,8 @@ import { processCommand } from "../logic/terminalCommands";
 function TabPanel({ tabs, setTabs, activeTabId, address, setAddress, onAddBookmark }) {
   const outputRef = useRef(null);
 
+  const activeTab = tabs.find(t => t.id === activeTabId);
+
   // Only scroll to bottom when terminal output changes for the active tab
   useEffect(() => {
     const activeTab = tabs.find(t => t.id === activeTabId);
@@ -46,6 +48,9 @@ function TabPanel({ tabs, setTabs, activeTabId, address, setAddress, onAddBookma
     <div className="tab-panel">
       {/* Top Address Bar Row */}
       <div className="header-address-bar">
+        {activeTab?.favicon && (
+          <img src={activeTab.favicon} alt="" className="address-favicon" />
+        )}
         <div className="protocol-indicator" style={{ color: getProtocolColor(address) }}>
           {address ? (address.startsWith("https://") ? "🔒" : "⚠️") : ""}
         </div>

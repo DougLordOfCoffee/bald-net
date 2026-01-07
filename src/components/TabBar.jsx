@@ -44,7 +44,10 @@ function TabBar({ tabs, setTabs, activeTabId, onActivate, onClose, onAdd }) {
                 onKeyDown={(e) => e.key === "Enter" && setEditingTabId(null)}
               />
             ) : (
-              <span className="tab-title">{tab.title}</span>
+              <div className="tab-content">
+                {tab.favicon && <img src={tab.favicon} alt="" className="tab-favicon" />}
+                <span className="tab-title">{tab.title}</span>
+              </div>
             )}
             
             <span className="close" onClick={(e) => { e.stopPropagation(); onClose(tab.id); }}>
