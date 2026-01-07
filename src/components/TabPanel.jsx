@@ -35,11 +35,18 @@ function TabPanel({ tabs, setTabs, activeTabId, address, setAddress }) {
 
   const formatUrl = (input) => input.startsWith("http") ? input : `https://${input}`;
 
+  const getProtocolColor = (url) => {
+    if (!url) return "#666";
+    return url.startsWith("https://") ? "#0f0" : "#ff0";
+  };
+
   return (
     <div className="tab-panel">
       {/* Top Address Bar Row */}
       <div className="header-address-bar">
-        <div className="status-indicator online"></div>
+        <div className="protocol-indicator" style={{ color: getProtocolColor(address) }}>
+          {address ? (address.startsWith("https://") ? "🔒" : "⚠️") : ""}
+        </div>
         <input
           className="address-bar"
           placeholder="Current URLs appear here."

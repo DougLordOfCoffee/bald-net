@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import TabBar from "./components/TabBar.jsx";
 import TabPanel from "./components/TabPanel";
+import SystemBar from "./components/SystemBar.jsx";
 
 const STORAGE_KEY = "baldnet-tabs";
 const ACTIVE_KEY = "baldnet-active";
@@ -80,6 +81,10 @@ function App() {
         activeTabId={activeTabId}
         address={address}
         setAddress={setAddress}
+      />
+      <SystemBar 
+        activeTabId={activeTabId}
+        tabs={tabs}
       />
     </div>
   );

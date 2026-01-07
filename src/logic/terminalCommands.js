@@ -7,10 +7,15 @@ export const processCommand = (cmd, currentTabs, activeTabId) => {
   switch (method.toLowerCase()) {
     case "help":
       response.push({ text: "SYSTEM UTILITIES:", color: "#444" });
-      response.push({ text: "  GOTO [URL] - Navigate active view", color: "#888" });
-      response.push({ text: "  TABS       - List active processes", color: "#888" });
-      response.push({ text: "  CLEAR      - Purge terminal buffer", color: "#888" });
-      response.push({ text: "  TIME       - Sync with local clock", color: "#888" });
+      response.push({ text: "  GOTO [URL]     - Navigate active view", color: "#888" });
+      response.push({ text: "  TABS           - List active processes", color: "#888" });
+      response.push({ text: "  CLEAR          - Purge terminal buffer", color: "#888" });
+      response.push({ text: "  TIME           - Sync with local clock", color: "#888" });
+      response.push({ text: "  DATE           - Display current date", color: "#888" });
+      response.push({ text: "  WHOAMI         - Display system identity", color: "#888" });
+      response.push({ text: "  PING [HOST]    - Test network connectivity", color: "#888" });
+      response.push({ text: "  ECHO [TEXT]    - Display text", color: "#888" });
+      response.push({ text: "  LS             - List directory contents", color: "#888" });
       break;
 
     case "clear":
@@ -37,8 +42,37 @@ export const processCommand = (cmd, currentTabs, activeTabId) => {
       response.push({ text: `CURRENT SYSTEM TIME: ${new Date().toLocaleTimeString()}`, color: "#fff" });
       break;
 
-    default:
-      response.push({ text: `COMMAND NOT RECOGNIZED: ${method}`, color: "#f00" });
+    case "date":
+      response.push({ text: `CURRENT SYSTEM DATE: ${new Date().toLocaleDateString()}`, color: "#fff" });
+      break;
+
+    case "whoami":
+      response.push({ text: "SYSTEM IDENTITY: BALD-NET TERMINAL v1.0", color: "#0f0" });
+      response.push({ text: "USER: ANONYMOUS", color: "#0f0" });
+      break;
+
+    case "ping":
+      if (!args[0]) {
+        response.push({ text: "ERR: HOST REQUIRED", color: "#f00" });
+      } else {
+        response.push({ text: `PINGING ${args[0]}...`, color: "#ff0" });
+        response.push({ text: `REPLY FROM ${args[0]}: TIME<1ms TTL=64`, color: "#0f0" });
+      }
+      break;
+
+    case "echo":
+      const text = args.join(" ");
+      response.push({ text: text || "(empty)", color: "#aaa" });
+      break;
+
+    case "ls":
+      response.push({ text: "DRIVE C:", color: "#444" });
+      response.push({ text: "├── SYSTEM32", color: "#888" });
+      response.push({ text: "├── PROGRAM FILES", color: "#888" });
+      response.push({ text: "├── USERS", color: "#888" });
+      response.push({ text: "│   └── ANONYMOUS", color: "#888" });
+      response.push({ text: "└── BALD-NET", color: "#0f0" });
+      break;
   }
 
   return { action: "APPEND_OUTPUT", data: response };

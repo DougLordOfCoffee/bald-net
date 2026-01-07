@@ -49,6 +49,11 @@ function createTab(tabId, url) {
   view.webContents.on("did-navigate", (_, url) => win.webContents.send("url-updated", tabId, url));
   view.webContents.on("did-navigate-in-page", (_, url) => win.webContents.send("url-updated", tabId, url));
   view.webContents.on("page-title-updated", (_, title) => win.webContents.send("title-updated", tabId, title));
+  
+  // Connection status events
+  view.webContents.on("did-start-loading", () => win.webContents.send("connection-status", tabId, "loading"));
+  view.webContents.on("did-stop-loading", () => win.webContents.send("connection-status", tabId, "online"));
+  view.webContents.on("did-fail-load", () => win.webContents.send("connection-status", tabId, "offline"));
 
   views.set(tabId, view);
   view.webContents.loadURL(url);
