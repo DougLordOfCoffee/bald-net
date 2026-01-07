@@ -1,14 +1,16 @@
 import { useRef, useEffect } from "react";
 import { processCommand } from "../logic/terminalCommands";
 
-function TabPanel({ tabs, setTabs, activeTabId, address, setAddress }) {
+function TabPanel({ tabs, setTabs, activeTabId, address, setAddress, onAddBookmark }) {
   const outputRef = useRef(null);
 
+  // Only scroll to bottom when terminal output changes for the active tab
   useEffect(() => {
-    if (outputRef.current) {
+    const activeTab = tabs.find(t => t.id === activeTabId);
+    if (activeTab?.type === "terminal" && outputRef.current) {
       outputRef.current.scrollTop = outputRef.current.scrollHeight;
     }
-  }, [tabs]);
+  }, [tabs.find(t => t.id === activeTabId)?.output]);
 
   const handleTerminalCommand = (tabId, cmd) => {
     if (!cmd.trim()) return;
@@ -58,6 +60,14 @@ function TabPanel({ tabs, setTabs, activeTabId, address, setAddress }) {
             }
           }}
         />
+        <button 
+          className="bookmark-add-btn"
+          onClick={() => onAddBookmark && onAddBookmark(address)}
+          disabled={!address}
+          title="Add to bookmarks"
+        >
+          ⭐
+        </button>
       </div>
 
       <div className="view-container">
@@ -88,24 +98,26 @@ function TabPanel({ tabs, setTabs, activeTabId, address, setAddress }) {
           if (tab.type === "terminal") {
             return (
               <div key={tab.id} className={`terminal-view ${displayClass}`}>
+                <div className="terminal-window">
+                  <div className="terminal-output" ref={outputRef}>
+                    {tab.output.map((line, i) => (
+                      <div key={i} style={{ color: line.color }}>{line.text}</div>
+                    ))}
+                  </div>
+                  <div className="terminal-input-row">
+                    <span>&gt;</span>
+                    <input
+                      autoFocus={isActive}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleTerminalCommand(tab.id, e.target.value);
+                          e.target.value = "";
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
                 <div className="scanlines"></div>
-                <div className="terminal-output" ref={outputRef}>
-                  {tab.output.map((line, i) => (
-                    <div key={i} style={{ color: line.color }}>{line.text}</div>
-                  ))}
-                </div>
-                <div className="terminal-input-row">
-                  <span>&gt;</span>
-                  <input
-                    autoFocus={isActive}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        handleTerminalCommand(tab.id, e.target.value);
-                        e.target.value = "";
-                      }
-                    }}
-                  />
-                </div>
               </div>
             );
           }

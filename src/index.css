@@ -123,11 +123,23 @@ body {
   padding: 20px;
   font-family: 'Fira Code', 'Courier New', monospace;
   background: #000;
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal-window {
+  flex: 1;
+  border: 1px solid #333;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  max-height: 400px; /* Fixed height window */
 }
 
 .terminal-output {
   flex: 1;
   overflow-y: auto;
+  padding: 10px;
   font-size: 13px;
   line-height: 1.6;
   text-shadow: 0 0 5px rgba(0, 255, 65, 0.2); /* Soft glow */
@@ -136,8 +148,9 @@ body {
 .terminal-input-row {
   display: flex;
   gap: 10px;
-  padding-top: 10px;
+  padding: 10px;
   border-top: 1px solid #111;
+  background: #000;
 }
 
 .terminal-input-row input {
@@ -147,6 +160,7 @@ body {
   color: var(--terminal-phosphor);
   flex: 1;
   font-family: inherit;
+  font-size: 13px;
 }
 
 /* 5. Address Bars  */
@@ -243,10 +257,10 @@ body {
 
 .scanlines {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
   background: linear-gradient(
     rgba(18, 16, 16, 0) 50%, 
     rgba(0, 0, 0, 0.1) 50%
@@ -322,6 +336,31 @@ body {
   outline: none;
 }
 
+.bookmark-add-btn {
+  background: transparent;
+  border: 1px solid var(--border-sharp);
+  color: var(--text-ethereal);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  margin-left: 8px;
+  transition: all 0.2s ease;
+}
+
+.bookmark-add-btn:hover:not(:disabled) {
+  border-color: var(--text-active);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.bookmark-add-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
 /* System Bar */
 .system-bar {
   height: var(--footer-height);
@@ -341,6 +380,37 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.bookmarks {
+  display: flex;
+  gap: 5px;
+  margin-right: 10px;
+}
+
+.bookmark {
+  background: transparent;
+  border: 1px solid var(--border-sharp);
+  color: var(--text-ethereal);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.bookmark:hover {
+  border-color: var(--text-active);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.bookmark.active {
+  border-color: var(--border-active);
+  background: var(--bg-monolith);
+  color: var(--text-active);
 }
 
 .system-bar-center {
@@ -392,6 +462,12 @@ body {
   color: #00ff41;
   font-size: 9px;
   text-transform: uppercase;
+}
+
+.battery-indicator {
+  color: #fff;
+  font-size: 9px;
+  margin-left: 15px;
 }
 
 .system-time {

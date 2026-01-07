@@ -105,4 +105,16 @@ ipcMain.on("nav-forward", () => {
   if (wc?.canGoForward()) wc.goForward();
 });
 
+ipcMain.on("window-maximize", () => {
+  if (win.isMaximized()) {
+    win.unmaximize();
+  } else {
+    win.maximize();
+  }
+});
+
+ipcMain.on("window-minimize", () => {
+  win.minimize();
+});
+
 app.whenReady().then(createWindow);
