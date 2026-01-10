@@ -18,7 +18,7 @@ function createWindow() {
     webPreferences: { preload: path.join(__dirname, "preload.js") }
   });
 
-  win.loadURL("http://localhost:5173");
+  win.loadFile(path.join(__dirname, "index.html"))
 
   // Handle resizing of BrowserViews when window resizes
   win.on('resize', () => {

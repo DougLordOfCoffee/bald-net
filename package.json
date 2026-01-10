@@ -1,19 +1,18 @@
 {
-  "name": "Bald-Net",
+  "name": "bald-net",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "main": "main.js",
   "scripts": {
     "dev": "vite",
-    "build": "electron-builder",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
     "electron": "electron .",
-    "desktop": "concurrently \"npm run dev\" \"npm run electron\""
+    "desktop": "concurrently \"npm run dev\" \"npm run electron\"",
+
+    "build:ui": "vite build",
+    "build": "npm run build:ui && electron-builder"
   },
+
   "dependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
@@ -38,6 +37,11 @@
   "build": {
     "appId": "com.FatAhFrog.Bald-Net",
     "productName": "Bald-Net",
+    "files": [
+      "dist/**/*",
+      "main.js",
+      "preload.js"
+    ],
     "win": {
       "target": "nsis"
     }
